@@ -131,8 +131,13 @@ font-size:15px;
 background:#0f7b4f;
 color:white;
 cursor:pointer;
+transition:.3s;
+}
+button:hover{
+background:#065f46;
 }
 
+/* SWITCHER */
 .switcher{
 background:#1f2937;
 }
@@ -191,25 +196,118 @@ padding:14px;
 border-radius:16px;
 }
 
-/* SIDEBAR */
+/* SIDEBAR – تصميم احترافي */
 .sidebar{
 position:fixed;
 top:0;
 right:-100%;
-width:80%;
+width:75%;
+max-width:400px;
 height:100%;
-background:white;
-padding:22px;
-transition:.4s;
+background:#ffffff;
+padding:24px;
+transition:.4s ease-in-out;
 z-index:500;
 overflow-y:auto;
+box-shadow: -8px 0 25px rgba(0,0,0,0.15);
+border-top-left-radius:20px;
+border-bottom-left-radius:20px;
+font-size:15px;
 }
 .sidebar.active{
 right:0;
 }
+
+/* زر الإغلاق */
 .close{
-font-size:22px;
+font-size:26px;
 cursor:pointer;
+color:#0f7b4f;
+font-weight:700;
+position:absolute;
+top:16px;
+left:16px;
+}
+
+/* شعار داخل الستارة */
+.sidebar .logo{
+width:60px;
+height:60px;
+border-radius:18px;
+background:#0f7b4f;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:700;
+font-size:20px;
+margin-bottom:20px;
+box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+/* العناوين */
+.accordion{
+cursor:pointer;
+background:#0f7b4f;
+color:white;
+padding:12px 16px;
+margin-top:16px;
+border:none;
+border-radius:18px;
+font-size:15px;
+font-weight:600;
+display:flex;
+justify-content:space-between;
+align-items:center;
+transition:.3s;
+}
+.accordion:hover{
+background:#065f46;
+}
+.accordion:after{
+content:"▼";
+font-size:12px;
+margin-left:10px;
+transition:.3s;
+}
+.accordion.active:after{
+content:"▲";
+}
+
+/* محتوى الأكورديون */
+.panel{
+max-height:0;
+overflow:hidden;
+transition:max-height .3s ease;
+background:#f9fafb;
+padding:0 12px;
+border-radius:14px;
+margin-top:6px;
+color:#374151;
+line-height:1.6;
+}
+
+/* زر الحساب والتواصل */
+.sidebar .action-btn{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:8px;
+background:#0f7b4f;
+color:white;
+padding:14px;
+border:none;
+border-radius:18px;
+font-size:15px;
+width:100%;
+cursor:pointer;
+transition:.3s;
+margin-top:20px;
+box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.sidebar .action-btn:hover{
+background:#065f46;
+box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 }
 
 /* WHATSAPP */
@@ -241,38 +339,33 @@ z-index:400;
 <!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
 <div class="close" onclick="toggleMenu()">✕</div>
-
 <div class="logo">SY</div>
 
-<h3>حول التطبيق</h3>
+<!-- أكورديون -->
+<button class="accordion">حول التطبيق</button>
+<div class="panel">
 <p>
 SYP Smart هو موقع ذكي ومبسّط لتحويل العملة السورية بين النظام القديم والجديد،
 مصمم خصيصًا ليعمل بسلاسة على الهواتف الذكية مع حفظ تلقائي وسجل كامل.
 </p>
+</div>
 
-<h3>حول المطور</h3>
+<button class="accordion">حول المطور</button>
+<div class="panel">
 <p>
 تم تطوير هذا الموقع بعناية واهتمام بأدق التفاصيل،
 ليقدم تجربة استخدام هادئة، سريعة، وعملية،
 مع اعتماد تصميم عصري وهوية بصرية سورية أنيقة.
 </p>
+</div>
 
-<hr style="margin:20px 0">
-
-<button onclick="openCustomerPage()" style="
-background:#0f7b4f;
-color:white;
-padding:14px;
-border:none;
-border-radius:18px;
-font-size:15px;
-width:100%;
-cursor:pointer">
-🧾 حساب الزبون
-</button>
-
-<h3 style="margin-top:20px">التواصل</h3>
+<button class="accordion">التواصل</button>
+<div class="panel">
 <p>📞 +963 992 320 306</p>
+<a class="action-btn" href="https://wa.me/963992320306">💬 تواصل عبر واتساب</a>
+</div>
+
+<button class="action-btn" onclick="openCustomerPage()">🧾 حساب الزبون</button>
 </div>
 
 <div class="app">
@@ -399,6 +492,20 @@ renderHistory();
 function toggleMenu(){
 document.getElementById("sidebar").classList.toggle("active");
 }
+
+// أكورديون
+const accordions = document.querySelectorAll(".accordion");
+accordions.forEach(acc=>{
+acc.addEventListener("click",()=>{
+acc.classList.toggle("active");
+let panel = acc.nextElementSibling;
+if(panel.style.maxHeight){
+panel.style.maxHeight = null;
+} else {
+panel.style.maxHeight = panel.scrollHeight + "px";
+}
+});
+});
 
 function openCustomerPage(){
 window.location.href="customer.html";
