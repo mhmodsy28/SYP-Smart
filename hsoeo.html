@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>SYP Smart | تحويل العملة السورية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+--green:#0f7b4f;
+--white:#ffffff;
+--black:#111827;
+--soft:#f4f7f6;
+--gray:#6b7280;
+}
+
+*{
+box-sizing:border-box;
+font-family:'Cairo',sans-serif;
+}
+
+html, body{
+margin:0;
+padding:0;
+height:100%;
+width:100%;
+overflow:hidden; /* لنرى overflow داخل الكارد */
+position:fixed;
+overscroll-behavior:contain;
+background:linear-gradient(to bottom,#0f7b4f 0%,#0f7b4f 25%,#ffffff 25%,#ffffff 65%,#111827 65%,#111827 100%);
+}
+
+/* SPLASH */
+#splash{
+position:fixed;
+inset:0;
+background:linear-gradient(to bottom,#0f7b4f,#ffffff,#111827);
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+z-index:999;
+color:#111;
+animation:hide 1s ease forwards;
+animation-delay:2s;
+}
+@keyframes hide{to{opacity:0;visibility:hidden}}
+
+.logo{
+width:70px;
+height:70px;
+border-radius:20px;
+background:#fff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:26px;
+font-weight:700;
+color:#0f7b4f;
+box-shadow:0 8px 20px rgba(0,0,0,.25);
+margin-bottom:12px;
+}
+
+/* APP */
+.app{
+height:100%;
+display:flex;
+flex-direction:column;
+position:relative;
+z-index:3;
+}
+
+/* TOPBAR */
+.topbar{
+padding:12px 16px;
+background:rgba(15,123,79,.95);
+color:white;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+.top-left{
+display:flex;
+align-items:center;
+gap:10px;
+}
+.menu{
+font-size:24px;
+cursor:pointer;
+}
+
+/* MAIN */
+.main{
+flex:1;
+display:flex;
+justify-content:center;
+align-items:stretch;
+padding:14px;
+}
+
+/* CARD */
+.card{
+width:100%;
+max-width:420px;
+background:white;
+border-radius:28px;
+padding:22px;
+box-shadow:0 20px 45px rgba(0,0,0,.25);
+
+/* إصلاح التمرير */
+max-height:100%;
+overflow-y:auto;
+-webkit-overflow-scrolling:touch;
+}
+
+/* INPUT */
+input{
+width:100%;
+padding:16px;
+border-radius:18px;
+border:1px solid #d1d5db;
+font-size:15px;
+margin-top:14px;
+}
+
+/* BUTTON */
+button{
+width:100%;
+margin-top:10px;
+padding:14px;
+border:none;
+border-radius:18px;
+font-size:15px;
+background:#0f7b4f;
+color:white;
+cursor:pointer;
+touch-action:manipulation;
+}
+
+.switcher{
+background:#1f2937;
+}
+
+/* RESULT */
+.result{
+margin-top:16px;
+padding:18px;
+background:#ecfdf5;
+border:2px solid #0f7b4f;
+border-radius:20px;
+text-align:center;
+}
+.result .value{
+font-size:28px;
+font-weight:700;
+color:#0f7b4f;
+margin-bottom:6px;
+}
+.result .label{
+font-size:14px;
+color:#065f46;
+}
+
+/* ACTIONS */
+.actions{
+display:flex;
+gap:8px;
+margin-top:10px;
+}
+.actions button{
+flex:1;
+font-size:13px;
+background:#374151;
+}
+
+/* HISTORY */
+.history{
+margin-top:16px;
+font-size:13px;
+max-height:180px;
+overflow-y:auto;
+-webkit-overflow-scrolling:touch;
+}
+.history-item{
+padding:8px 0;
+border-bottom:1px solid #e5e7eb;
+}
+
+/* FOOTER */
+.footer{
+margin-top:18px;
+font-size:13px;
+color:#374151;
+line-height:1.8;
+background:#f9fafb;
+padding:14px;
+border-radius:16px;
+}
+
+/* SIDEBAR */
+.sidebar{
+position:fixed;
+top:0;
+right:-100%;
+width:80%;
+height:100%;
+background:white;
+padding:22px;
+transition:.4s;
+z-index:500;
+overflow-y:auto;
+-webkit-overflow-scrolling:touch;
+}
+.sidebar.active{
+right:0;
+}
+.close{
+font-size:22px;
+cursor:pointer;
+}
+
+/* WHATSAPP */
+.whatsapp{
+position:fixed;
+bottom:18px;
+left:18px;
+background:#25d366;
+color:white;
+padding:14px 18px;
+border-radius:50px;
+text-decoration:none;
+font-size:14px;
+z-index:400;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+<div class="logo">SY</div>
+<h2>SYP Smart</h2>
+<p>منصة ذكية لتحويل العملة السورية</p>
+</div>
+
+<a class="whatsapp" href="https://wa.me/963992320306">💬 واتساب مباشر</a>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+<div class="close" onclick="toggleMenu()">✕</div>
+
+<div class="logo">SY</div>
+
+<h3>حول التطبيق</h3>
+<p>
+SYP Smart هو موقع ذكي ومبسّط لتحويل العملة السورية بين النظام القديم والجديد،
+تم تصميمه ليعمل بسلاسة تامة على الهواتف الذكية.
+</p>
+
+<h3>حول المطور</h3>
+<p>
+تم تطوير هذا الموقع بعناية ليجمع بين البساطة، السرعة،
+والهوية البصرية الهادئة، مع تركيز كامل على تجربة المستخدم.
+</p>
+
+<h3>التواصل</h3>
+<p>📞 +963 992 320 306</p>
+</div>
+
+<div class="app">
+<div class="topbar">
+<div class="top-left">
+<div class="logo" style="width:42px;height:42px;font-size:16px">SY</div>
+<div>SYP Smart</div>
+</div>
+<div class="menu" onclick="toggleMenu()">☰</div>
+</div>
+
+<div class="main">
+<div class="card">
+
+<input id="amount" type="number" placeholder="أدخل المبلغ">
+
+<button onclick="convert()" id="convertBtn">تحويل إلى الليرة الجديدة</button>
+<button class="switcher" onclick="toggleMode()" id="switchBtn">↕ تبديل نوع التحويل</button>
+
+<div class="result">
+<div class="value" id="resultValue">—</div>
+<div class="label" id="resultLabel">الليرة السورية الجديدة</div>
+</div>
+
+<div class="actions">
+<button onclick="copyResult()">📋 نسخ</button>
+<button onclick="shareResult()">📤 مشاركة</button>
+</div>
+
+<div class="history" id="historyList"></div>
+
+<button onclick="exportHistory()" style="background:#2563eb">📄 تصدير السجل</button>
+<button onclick="clearHistory()" style="background:#6b7280">🗑 مسح السجل</button>
+
+<div class="footer">
+<strong>SYP Smart</strong> هو موقع مخصص لمساعدتك على تحويل العملة السورية
+من النظام القديم إلى النظام الجديد والعكس بسهولة تامة.
+لا يحتاج إلى تسجيل، يعمل مباشرة، ويحفظ عملياتك تلقائيًا
+لتجربة استخدام سريعة وموثوقة على الهاتف.
+</div>
+
+</div>
+</div>
+</div>
+
+<script>
+let mode="forward";
+let history=JSON.parse(localStorage.history||"[]");
+
+const amount=document.getElementById("amount");
+const resultValue=document.getElementById("resultValue");
+const resultLabel=document.getElementById("resultLabel");
+const convertBtn=document.getElementById("convertBtn");
+const historyList=document.getElementById("historyList");
+
+amount.value=localStorage.lastAmount||"";
+
+function vibrate(){if(navigator.vibrate) navigator.vibrate(40);}
+function now(){let d=new Date();return d.toLocaleDateString()+" "+d.toLocaleTimeString();}
+function format(n){return Number(n).toLocaleString();}
+
+function convert(){
+if(amount.value<=0) return;
+vibrate();
+localStorage.lastAmount=amount.value;
+
+let r;
+if(mode==="forward"){
+r=amount.value/100;
+resultLabel.innerText="الليرة السورية الجديدة";
+}else{
+r=amount.value*100;
+resultLabel.innerText="الليرة السورية القديمة";
+}
+
+resultValue.innerText=format(r);
+
+history.unshift(`${format(amount.value)} → ${format(r)} | ${now()}`);
+localStorage.history=JSON.stringify(history);
+renderHistory();
+}
+
+function toggleMode(){
+mode = mode==="forward" ? "reverse" : "forward";
+convertBtn.innerText = mode==="forward"
+? "تحويل إلى الليرة الجديدة"
+: "تحويل إلى الليرة القديمة";
+convert(); // تحديث النتيجة مباشرة
+}
+
+function renderHistory(){
+historyList.innerHTML="";
+history.forEach(h=>{
+let div=document.createElement("div");
+div.className="history-item";
+div.innerText=h;
+historyList.appendChild(div);
+});
+}
+
+function copyResult(){
+vibrate();
+navigator.clipboard.writeText(resultValue.innerText+" "+resultLabel.innerText);
+alert("تم نسخ المبلغ بنجاح");
+}
+
+function shareResult(){
+let msg=
+`تمت عملية تحويل العملة عبر موقع SYP Smart 🇸🇾
+
+💱 النتيجة:
+${resultValue.innerText} ${resultLabel.innerText}
+
+موقع ذكي وسريع لتحويل العملة السورية
+مصمم خصيصًا للاستخدام اليومي على الهاتف.`;
+window.open("https://wa.me/?text="+encodeURIComponent(msg));
+}
+
+function exportHistory(){
+let blob=new Blob([history.join("\n")],{type:"text/plain"});
+let a=document.createElement("a");
+a.href=URL.createObjectURL(blob);
+a.download="SYP_Smart_History.txt";
+a.click();
+}
+
+function clearHistory(){
+history=[];
+localStorage.removeItem("history");
+renderHistory();
+}
+
+function toggleMenu(){
+document.getElementById("sidebar").classList.toggle("active");
+}
+
+renderHistory();
+</script>
+</body>
+</html>
