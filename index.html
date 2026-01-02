@@ -2,9 +2,11 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SYP Smart | تحويل العملة السورية</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+
 <style>
 :root{
 --green:#0f7b4f;
@@ -19,15 +21,19 @@ box-sizing:border-box;
 font-family:'Cairo',sans-serif;
 }
 
-html, body{
+html,body{
 margin:0;
 padding:0;
 height:100%;
-width:100%;
-overflow:hidden; /* لنرى overflow داخل الكارد */
-position:fixed;
-overscroll-behavior:contain;
-background:linear-gradient(to bottom,#0f7b4f 0%,#0f7b4f 25%,#ffffff 25%,#ffffff 65%,#111827 65%,#111827 100%);
+background:linear-gradient(
+to bottom,
+#0f7b4f 0%,
+#0f7b4f 25%,
+#ffffff 25%,
+#ffffff 65%,
+#111827 65%,
+#111827 100%
+);
 }
 
 /* SPLASH */
@@ -40,15 +46,13 @@ flex-direction:column;
 justify-content:center;
 align-items:center;
 z-index:999;
-color:#111;
 animation:hide 1s ease forwards;
 animation-delay:2s;
 }
 @keyframes hide{to{opacity:0;visibility:hidden}}
 
 .logo{
-width:70px;
-height:70px;
+width:70px;height:70px;
 border-radius:20px;
 background:#fff;
 display:flex;
@@ -63,17 +67,15 @@ margin-bottom:12px;
 
 /* APP */
 .app{
-height:100%;
+min-height:100vh;
 display:flex;
 flex-direction:column;
-position:relative;
-z-index:3;
 }
 
 /* TOPBAR */
 .topbar{
 padding:12px 16px;
-background:rgba(15,123,79,.95);
+background:#0f7b4f;
 color:white;
 display:flex;
 justify-content:space-between;
@@ -89,13 +91,13 @@ font-size:24px;
 cursor:pointer;
 }
 
-/* MAIN */
+/* MAIN (تمكين التمرير) */
 .main{
 flex:1;
+overflow-y:auto;
+padding:14px;
 display:flex;
 justify-content:center;
-align-items:stretch;
-padding:14px;
 }
 
 /* CARD */
@@ -106,11 +108,6 @@ background:white;
 border-radius:28px;
 padding:22px;
 box-shadow:0 20px 45px rgba(0,0,0,.25);
-
-/* إصلاح التمرير */
-max-height:100%;
-overflow-y:auto;
--webkit-overflow-scrolling:touch;
 }
 
 /* INPUT */
@@ -119,7 +116,7 @@ width:100%;
 padding:16px;
 border-radius:18px;
 border:1px solid #d1d5db;
-font-size:15px;
+font-size:16px;
 margin-top:14px;
 }
 
@@ -134,7 +131,6 @@ font-size:15px;
 background:#0f7b4f;
 color:white;
 cursor:pointer;
-touch-action:manipulation;
 }
 
 .switcher{
@@ -151,10 +147,9 @@ border-radius:20px;
 text-align:center;
 }
 .result .value{
-font-size:28px;
+font-size:30px;
 font-weight:700;
 color:#0f7b4f;
-margin-bottom:6px;
 }
 .result .label{
 font-size:14px;
@@ -179,7 +174,6 @@ margin-top:16px;
 font-size:13px;
 max-height:180px;
 overflow-y:auto;
--webkit-overflow-scrolling:touch;
 }
 .history-item{
 padding:8px 0;
@@ -209,7 +203,6 @@ padding:22px;
 transition:.4s;
 z-index:500;
 overflow-y:auto;
--webkit-overflow-scrolling:touch;
 }
 .sidebar.active{
 right:0;
@@ -229,7 +222,6 @@ color:white;
 padding:14px 18px;
 border-radius:50px;
 text-decoration:none;
-font-size:14px;
 z-index:400;
 }
 </style>
@@ -255,13 +247,14 @@ z-index:400;
 <h3>حول التطبيق</h3>
 <p>
 SYP Smart هو موقع ذكي ومبسّط لتحويل العملة السورية بين النظام القديم والجديد،
-تم تصميمه ليعمل بسلاسة تامة على الهواتف الذكية.
+مصمم خصيصًا ليعمل بسلاسة على الهواتف الذكية مع حفظ تلقائي وسجل كامل.
 </p>
 
 <h3>حول المطور</h3>
 <p>
-تم تطوير هذا الموقع بعناية ليجمع بين البساطة، السرعة،
-والهوية البصرية الهادئة، مع تركيز كامل على تجربة المستخدم.
+تم تطوير هذا الموقع بعناية واهتمام بأدق التفاصيل،
+ليقدم تجربة استخدام هادئة، سريعة، وعملية،
+مع اعتماد تصميم عصري وهوية بصرية سورية أنيقة.
 </p>
 
 <h3>التواصل</h3>
@@ -280,10 +273,10 @@ SYP Smart هو موقع ذكي ومبسّط لتحويل العملة السور
 <div class="main">
 <div class="card">
 
-<input id="amount" type="number" placeholder="أدخل المبلغ">
+<input id="amount" type="text" inputmode="numeric" placeholder="أدخل المبلغ">
 
 <button onclick="convert()" id="convertBtn">تحويل إلى الليرة الجديدة</button>
-<button class="switcher" onclick="toggleMode()" id="switchBtn">↕ تبديل نوع التحويل</button>
+<button class="switcher" onclick="toggleMode()">↕ تبديل نوع التحويل</button>
 
 <div class="result">
 <div class="value" id="resultValue">—</div>
@@ -301,10 +294,9 @@ SYP Smart هو موقع ذكي ومبسّط لتحويل العملة السور
 <button onclick="clearHistory()" style="background:#6b7280">🗑 مسح السجل</button>
 
 <div class="footer">
-<strong>SYP Smart</strong> هو موقع مخصص لمساعدتك على تحويل العملة السورية
-من النظام القديم إلى النظام الجديد والعكس بسهولة تامة.
-لا يحتاج إلى تسجيل، يعمل مباشرة، ويحفظ عملياتك تلقائيًا
-لتجربة استخدام سريعة وموثوقة على الهاتف.
+<strong>SYP Smart</strong> هو موقع احترافي لتحويل العملة السورية
+من النظام القديم إلى النظام الجديد والعكس،
+بتجربة استخدام هادئة، واضحة، ومصممة خصيصًا للهواتف.
 </div>
 
 </div>
@@ -314,80 +306,72 @@ SYP Smart هو موقع ذكي ومبسّط لتحويل العملة السور
 <script>
 let mode="forward";
 let history=JSON.parse(localStorage.history||"[]");
-
 const amount=document.getElementById("amount");
-const resultValue=document.getElementById("resultValue");
-const resultLabel=document.getElementById("resultLabel");
-const convertBtn=document.getElementById("convertBtn");
-const historyList=document.getElementById("historyList");
 
-amount.value=localStorage.lastAmount||"";
+amount.addEventListener("input",()=>{
+let v=amount.value.replace(/\D/g,"");
+amount.value = v ? Number(v).toLocaleString() : "";
+});
 
-function vibrate(){if(navigator.vibrate) navigator.vibrate(40);}
-function now(){let d=new Date();return d.toLocaleDateString()+" "+d.toLocaleTimeString();}
-function format(n){return Number(n).toLocaleString();}
-
-function convert(){
-if(amount.value<=0) return;
-vibrate();
-localStorage.lastAmount=amount.value;
-
-let r;
-if(mode==="forward"){
-r=amount.value/100;
-resultLabel.innerText="الليرة السورية الجديدة";
-}else{
-r=amount.value*100;
-resultLabel.innerText="الليرة السورية القديمة";
+function getNumber(){
+return Number(amount.value.replace(/,/g,""));
 }
 
-resultValue.innerText=format(r);
+function convert(){
+let val=getNumber();
+if(!val) return;
 
-history.unshift(`${format(amount.value)} → ${format(r)} | ${now()}`);
+let r = mode==="forward" ? val/100 : val*100;
+
+document.getElementById("resultValue").innerText = r.toLocaleString();
+document.getElementById("resultLabel").innerText =
+mode==="forward" ? "الليرة السورية الجديدة" : "الليرة السورية القديمة";
+
+history.unshift(`${val.toLocaleString()} → ${r.toLocaleString()}`);
 localStorage.history=JSON.stringify(history);
 renderHistory();
 }
 
 function toggleMode(){
 mode = mode==="forward" ? "reverse" : "forward";
-convertBtn.innerText = mode==="forward"
-? "تحويل إلى الليرة الجديدة"
-: "تحويل إلى الليرة القديمة";
-convert(); // تحديث النتيجة مباشرة
+document.getElementById("convertBtn").innerText =
+mode==="forward" ? "تحويل إلى الليرة الجديدة" : "تحويل إلى الليرة القديمة";
+convert();
 }
 
 function renderHistory(){
-historyList.innerHTML="";
-history.forEach(h=>{
-let div=document.createElement("div");
-div.className="history-item";
-div.innerText=h;
-historyList.appendChild(div);
+let h=document.getElementById("historyList");
+h.innerHTML="";
+history.forEach(i=>{
+let d=document.createElement("div");
+d.className="history-item";
+d.innerText=i;
+h.appendChild(d);
 });
 }
 
 function copyResult(){
-vibrate();
-navigator.clipboard.writeText(resultValue.innerText+" "+resultLabel.innerText);
-alert("تم نسخ المبلغ بنجاح");
+navigator.clipboard.writeText(
+document.getElementById("resultValue").innerText+" "+
+document.getElementById("resultLabel").innerText
+);
+alert("تم النسخ بنجاح ✅");
 }
 
 function shareResult(){
-let msg=
-`تمت عملية تحويل العملة عبر موقع SYP Smart 🇸🇾
+let msg=`تمت عملية تحويل العملة عبر موقع SYP Smart 🇸🇾
 
 💱 النتيجة:
-${resultValue.innerText} ${resultLabel.innerText}
+${document.getElementById("resultValue").innerText}
+${document.getElementById("resultLabel").innerText}
 
-موقع ذكي وسريع لتحويل العملة السورية
-مصمم خصيصًا للاستخدام اليومي على الهاتف.`;
+موقع ذكي وسريع لتحويل العملة السورية.`;
 window.open("https://wa.me/?text="+encodeURIComponent(msg));
 }
 
 function exportHistory(){
-let blob=new Blob([history.join("\n")],{type:"text/plain"});
 let a=document.createElement("a");
-a.href=URL.createObjectURL(blob);
+a.href=URL.createObjectURL(new Blob([history.join("\n")]));
 a.download="SYP_Smart_History.txt";
 a.click();
 }
@@ -404,5 +388,6 @@ document.getElementById("sidebar").classList.toggle("active");
 
 renderHistory();
 </script>
+
 </body>
 </html>
