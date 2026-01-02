@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYP Smart | حساب الزبون</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+--green:#0f7b4f;
+--dark:#111827;
+--soft:#f4f7f6;
+--gray:#6b7280;
+}
+
+*{
+box-sizing:border-box;
+font-family:'Cairo',sans-serif;
+}
+
+body{
+margin:0;
+min-height:100vh;
+background:linear-gradient(
+to bottom,
+#0f7b4f 0%,
+#0f7b4f 25%,
+#ffffff 25%,
+#ffffff 70%,
+#111827 70%,
+#111827 100%
+);
+}
+
+/* HEADER */
+.header{
+padding:18px;
+color:white;
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.logo{
+width:46px;height:46px;
+border-radius:16px;
+background:#fff;
+color:#0f7b4f;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:700;
+font-size:18px;
+}
+
+/* CARD */
+.card{
+max-width:420px;
+margin:0 auto 24px;
+background:white;
+border-radius:28px;
+padding:22px;
+box-shadow:0 20px 45px rgba(0,0,0,.25);
+}
+
+/* TITLE */
+h2{
+margin:0 0 18px;
+font-size:18px;
+color:#0f7b4f;
+text-align:center;
+}
+
+/* INPUT */
+label{
+font-size:14px;
+color:#374151;
+margin-top:16px;
+display:block;
+}
+
+input{
+width:100%;
+padding:16px;
+border-radius:18px;
+border:1px solid #d1d5db;
+font-size:16px;
+margin-top:8px;
+}
+
+/* BADGE */
+.currency-badge{
+display:inline-block;
+margin-top:6px;
+padding:6px 14px;
+border-radius:20px;
+font-size:13px;
+font-weight:600;
+}
+
+.new{
+background:#dcfce7;
+color:#065f46;
+}
+
+.old{
+background:#e5e7eb;
+color:#1f2937;
+}
+
+/* BUTTON */
+button{
+width:100%;
+margin-top:14px;
+padding:14px;
+border:none;
+border-radius:18px;
+font-size:15px;
+background:#0f7b4f;
+color:white;
+cursor:pointer;
+}
+
+/* RESULT */
+.result{
+margin-top:20px;
+background:#ecfdf5;
+border:2px solid #0f7b4f;
+border-radius:22px;
+padding:18px;
+text-align:center;
+}
+
+.result strong{
+font-size:18px;
+color:#065f46;
+}
+
+.result div{
+margin-top:8px;
+font-size:15px;
+}
+
+/* NOTE */
+.note{
+margin-top:14px;
+font-size:13px;
+color:#374151;
+background:#f9fafb;
+padding:12px;
+border-radius:14px;
+line-height:1.8;
+}
+
+/* HISTORY */
+.history{
+margin-top:18px;
+max-height:160px;
+overflow-y:auto;
+font-size:13px;
+}
+
+.history-item{
+padding:8px 0;
+border-bottom:1px solid #e5e7eb;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<div class="logo">SY</div>
+<div>
+<strong>SYP Smart</strong><br>
+<small>حساب الزبون</small>
+</div>
+</div>
+
+<div class="card">
+
+<h2 id="currencyTitle">🧾 حساب الزبون – الليرة السورية الجديدة</h2>
+
+<label>💼 إجمالي حساب الزبون</label>
+<input id="total" inputmode="numeric" placeholder="أدخل إجمالي الحساب">
+<div id="totalBadge" class="currency-badge new">الليرة السورية الجديدة</div>
+
+<button onclick="toggleCurrency()">↔ تبديل العملة</button>
+
+<label>💵 المبلغ المدفوع (الليرة السورية القديمة)</label>
+<input id="paid" inputmode="numeric" placeholder="المبلغ المدفوع">
+<div class="currency-badge old">الليرة السورية القديمة</div>
+
+<button onclick="calculate()">📊 حساب المتبقي</button>
+
+<div class="result" id="resultBox" style="display:none">
+<strong>المبلغ المتبقي</strong>
+<div id="remainNew"></div>
+<div id="remainOld"></div>
+</div>
+
+<div class="note">
+✳ اكتب المبلغ حسب العملة الظاهرة أعلى الحقل<br>
+✳ التحويل يتم تلقائيًا بدون أخطاء<br>
+✳ يتم حفظ كل عملية تلقائيًا
+</div>
+
+<div class="history" id="history"></div>
+
+</div>
+
+<script>
+let mode="new";
+let history=JSON.parse(localStorage.customerHistory||"[]");
+
+// دالة تنسيق الأرقام
+function formatInput(el){
+el.addEventListener("input",()=>{
+let v=el.value.replace(/\D/g,"");
+el.value=v?Number(v).toLocaleString():"";
+});
+}
+
+formatInput(total);
+formatInput(paid);
+
+// تبديل العملة
+function toggleCurrency(){
+mode = mode==="new"?"old":"new";
+
+document.getElementById("currencyTitle").innerText =
+mode==="new"
+? "🧾 حساب الزبون – الليرة السورية الجديدة"
+: "🧾 حساب الزبون – الليرة السورية القديمة";
+
+const badge=document.getElementById("totalBadge");
+badge.innerText =
+mode==="new"?"الليرة السورية الجديدة":"الليرة السورية القديمة";
+badge.className="currency-badge "+(mode==="new"?"new":"old");
+}
+
+// تحويل القيم
+function num(id){
+return Number(document.getElementById(id).value.replace(/,/g,""));
+}
+
+// حساب المتبقي
+function calculate(){
+let totalVal=num("total");
+let paidVal=num("paid");
+if(!totalVal) return;
+
+// تحويل لكلتا العملتين
+let totalOld = mode==="new"? totalVal*100 : totalVal;
+let remainOld = totalOld - paidVal;
+let remainNew = remainOld/100;
+
+// عرض النتيجة مع "أو" بين الجديد والقديم
+document.getElementById("remainNew").innerText =
+"💶 "+remainNew.toLocaleString()+" ل.س جديدة أو 💴 "+remainOld.toLocaleString()+" ل.س قديمة";
+document.getElementById("remainOld").innerText = ""; // نترك السطر الثاني فارغًا لتوضيح النتيجة في السطر الأول
+
+document.getElementById("resultBox").style.display="block";
+
+// حفظ في السجل
+history.unshift(
+`إجمالي: ${totalVal.toLocaleString()} (${mode==="new"?"جديدة":"قديمة"}) | المدفوع: ${paidVal.toLocaleString()} | المتبقي: ${remainNew.toLocaleString()} أو ${remainOld.toLocaleString()}`
+);
+
+localStorage.customerHistory=JSON.stringify(history);
+renderHistory();
+}
+
+// عرض السجل
+function renderHistory(){
+let h=document.getElementById("history");
+h.innerHTML="";
+history.forEach(i=>{
+let d=document.createElement("div");
+d.className="history-item";
+d.innerText=i;
+h.appendChild(d);
+});
+}
+
+renderHistory();
+</script>
+
+</body>
+</html>
